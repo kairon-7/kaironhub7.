@@ -1,67 +1,64 @@
--- Kairon Hub - Sangam Edition
-local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+-- Kairon Hub - Venyx Edition (Xeno Compatible)
+local Venyx = loadstring(game:HttpGet("https://raw.githubusercontent.com/pizzaboxer/Venyx/main/Venyx.lua"))()
 
-local Hub = WindUI:CreateWindow({
+local Hub = Venyx:CreateWindow({
     Title = "Kairon Hub",
     Size = UDim2.new(0, 500, 0, 400),
     Theme = "Dark"
 })
 
--- Tabs
-local PlayerTab = Hub:CreateTab("Player")
-local GameTab = Hub:CreateTab("Game")
-local VisualsTab = Hub:CreateTab("Visuals")
+local T1 = Hub:CreateTab("Player")
+local T2 = Hub:CreateTab("Game")
+local T3 = Hub:CreateTab("Visuals")
 
 -- PLAYER TAB
-PlayerTab:CreateLabel("Player Controls")
-
-PlayerTab:CreateButton({
+T1:AddButton({
     Name = "Heal",
     Callback = function()
-        local p = game.Players.LocalPlayer
-        if p and p.Character then
-            local h = p.Character:FindFirstChild("Humanoid")
-            if h then h.Health = h.MaxHealth end
+        local player = game.Players.LocalPlayer
+        if player and player.Character then
+            local humanoid = player.Character:FindFirstChild("Humanoid")
+            if humanoid then
+                humanoid.Health = humanoid.MaxHealth
+            end
         end
     end
 })
 
-PlayerTab:CreateToggle({
+T1:AddToggle({
     Name = "God Mode",
     Default = false,
     Callback = function(state)
-        local p = game.Players.LocalPlayer
-        if p and p.Character then
-            local h = p.Character:FindFirstChild("Humanoid")
-            if h then
-                h.MaxHealth = state and 1e9 or 100
-                h.Health = state and 1e9 or 100
+        local player = game.Players.LocalPlayer
+        if player and player.Character then
+            local humanoid = player.Character:FindFirstChild("Humanoid")
+            if humanoid then
+                humanoid.MaxHealth = state and 1e9 or 100
+                humanoid.Health = state and 1e9 or 100
             end
         end
     end
 })
 
 -- GAME TAB
-GameTab:CreateLabel("Game Controls")
-
-GameTab:CreateSlider({
+T2:AddSlider({
     Name = "Walk Speed",
     Min = 16,
     Max = 100,
     Default = 16,
     Callback = function(value)
-        local p = game.Players.LocalPlayer
-        if p and p.Character then
-            local h = p.Character:FindFirstChild("Humanoid")
-            if h then h.WalkSpeed = value end
+        local player = game.Players.LocalPlayer
+        if player and player.Character then
+            local humanoid = player.Character:FindFirstChild("Humanoid")
+            if humanoid then
+                humanoid.WalkSpeed = value
+            end
         end
     end
 })
 
 -- VISUALS TAB
-VisualsTab:CreateLabel("Visual Settings")
-
-VisualsTab:CreateToggle({
+T3:AddToggle({
     Name = "Full Bright",
     Default = false,
     Callback = function(state)
@@ -69,7 +66,5 @@ VisualsTab:CreateToggle({
     end
 })
 
--- Keybind
 Hub:SetKeybind("RightShift")
-
-print("Kairon Hub Loaded Successfully!")
+print("Kairon Hub Loaded")
