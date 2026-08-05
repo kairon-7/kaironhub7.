@@ -439,3 +439,125 @@ end)
 
 print("✦ KAIRON HUB LOADED ✦")
 print("Press RightShift to toggle")
+
+-- Add this to the World Tab section (replace the existing Auto Farm toggle)
+
+-- Blox Fruits Specific Toggles
+addToggle(worldTab, "⚔️ Auto Farm (BF)", false, function(state)
+    autoFarm = state
+    if state then
+        print("⚔️ Blox Fruits Auto Farm ON")
+    end
+end)
+
+addToggle(worldTab, "🎣 Auto Fish (BF)", false, function(state)
+    autoFish = state
+    if state then
+        print("🎣 Auto Fish ON - Equip rod!")
+    end
+end)
+
+addToggle(worldTab, "👑 Auto V4 (BF)", false, function(state)
+    autoV4 = state
+    if state then
+        print("👑 Auto V4 ON - Go to Mirage!")
+    end
+end)
+
+addToggle(worldTab, "🗡️ Auto Raid (BF)", false, function(state)
+    autoRaid = state
+    if state then
+        print("🗡️ Auto Raid ON")
+    end
+end)
+
+-- Add Blox Fruits teleports
+addButton(worldTab, "🌀 Teleport to Mirage", function()
+    for _, v in pairs(Workspace:GetChildren()) do
+        if string.find(v.Name:lower(), "mirage") then
+            local part = v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Head") or v:FindFirstChildWhichIsA("Part")
+            if part and player.Character then
+                player.Character.HumanoidRootPart.CFrame = part.CFrame * CFrame.new(0, 5, 0)
+                print("🌀 Teleported to Mirage!")
+                break
+            end
+        end
+    end
+end, Color3.fromRGB(200, 0, 200))
+
+coroutine.wrap(function()
+    while true do
+        wait(0.15)
+        if autoFarm and player.Character then
+            pcall(function()
+                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+                if not hrp then return end
+                
+                local nearest = nil
+                local shortest = 500
+                
+                -- Blox Fruits specific enemy detection
+                for _, v in pairs(Workspace:GetChildren()) do
+                    -- Check for Blox Fruits NPCs
+                    if v:FindFirstChild("Humanoid") and v ~= player.Character then
+                        local hum = v.Humanoid
+                        if hum.Health and hum.Health > 0 then
+                            local target = v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") or v:FindFirstChild("Head")
+                            if target then
+                                local dist = (target.Position - hrp.Position).Magnitude
+                                if dist < shortest then
+                                    shortest = dist
+                                    nearest = v
+                                end
+                            end
+                        end
+                    end
+                    -- Also check for NPCs without Humanoid (some BF enemies)
+                    if not nearest and v:IsA("Model") and v:FindFirstChild("Head") and not v:FindFirstChild("Humanoid") then
+                        if v.Name ~= player.Name then
+                            local target = v:FindFirstChild("Head") or v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso")
+                            if target then
+                                local dist = (target.Position - hrp.Position).Magnitude
+                                if dist < shortest then
+                                    shortest = dist
+                                    nearest = v
+                                end
+                            end
+                        end
+                    end
+                end
+                
+                if nearest then
+                    local target = nearest:FindFirstChild("HumanoidRootPart") or nearest:FindFirstChild("Torso") or nearest:FindFirstChild("Head")
+                    if target then
+                        hrp.CFrame = target.CFrame * CFrame.new(0, 0, 4)
+                        wait(0.05)
+                        VirtualUser:Button1Down(Vector2.new(0, 0))
+                        wait(0.05)
+                        VirtualUser:Button1Up(Vector2.new(0, 0))
+                    end
+                end
+            end)
+        end
+    end
+end)()
+
+coroutine.wrap(function()
+    while true do
+        wait(1)
+        if autoV4 then
+            pcall(function()
+                for _, v in pairs(Workspace:GetChildren()) do
+                    if v:FindFirstChild("ClickDetector") then
+                        local name = v.Name:lower()
+                        if string.find(name, "trial") or string.find(name, "gear") or string.find(name, "mirage") then
+                            fireclickdetector(v.ClickDetector)
+                            wait(0.5)
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)()
+
