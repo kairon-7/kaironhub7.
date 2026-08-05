@@ -211,7 +211,7 @@ local function loadMainHub()
     local hubTitle = Instance.new("TextLabel")
     hubTitle.Size = UDim2.new(1, -60, 1, 0)
     hubTitle.Position = UDim2.new(0, 15, 0, 0)
-    hubTitle.Text = "✦ KAIRON HUB ✦"
+    hubTitle.Text = "KAIRON HUB"
     hubTitle.TextColor3 = Color3.fromRGB(255, 200, 80)
     hubTitle.TextScaled = true
     hubTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -371,16 +371,16 @@ local function loadMainHub()
         pcall(callback, default)
     end
 
-    local playerTab = createTab("Player", "👤")
-    local worldTab = createTab("World", "🌍")
-    local miscTab = createTab("Misc", "🔧")
+    local playerTab = createTab("Player", "")
+    local worldTab = createTab("World", "")
+    local miscTab = createTab("Misc", "")
 
-    addButton(playerTab, "💚 Heal", function()
+    addButton(playerTab, "Heal", function()
         local hum = player.Character and player.Character:FindFirstChild("Humanoid")
         if hum then hum.Health = hum.MaxHealth end
     end, Color3.fromRGB(0, 150, 0))
 
-    addToggle(playerTab, "🛡️ God Mode", false, function(state)
+    addToggle(playerTab, "God Mode", false, function(state)
         godMode = state
         local hum = player.Character and player.Character:FindFirstChild("Humanoid")
         if hum then
@@ -390,15 +390,15 @@ local function loadMainHub()
     end)
 
     local speed = 16
-    local speedBtn = addButton(playerTab, "🚀 Speed: 16", function()
+    local speedBtn = addButton(playerTab, "Speed: 16", function()
         speed = speed + 10
         if speed > 100 then speed = 16 end
-        speedBtn.Text = "🚀 Speed: " .. speed
+        speedBtn.Text = "Speed: " .. speed
         local hum = player.Character and player.Character:FindFirstChild("Humanoid")
         if hum then hum.WalkSpeed = speed end
     end, Color3.fromRGB(0, 100, 200))
 
-    addToggle(playerTab, "🕊️ Fly Mode", false, function(state)
+    addToggle(playerTab, "Fly Mode", false, function(state)
         flyEnabled = state
         local char = player.Character
         if char then
@@ -409,7 +409,7 @@ local function loadMainHub()
         end
     end)
 
-    addToggle(playerTab, "🚪 Noclip", false, function(state)
+    addToggle(playerTab, "Noclip", false, function(state)
         noclipEnabled = state
         if state then
             for _, v in pairs(player.Character:GetChildren()) do
@@ -420,15 +420,15 @@ local function loadMainHub()
         end
     end)
 
-    addToggle(worldTab, "⚔️ Auto Farm", false, function(state)
+    addToggle(worldTab, "Auto Farm", false, function(state)
         autoFarm = state
     end)
 
-    addToggle(worldTab, "📦 Auto Collect", false, function(state)
+    addToggle(worldTab, "Auto Collect", false, function(state)
         autoCollect = state
     end)
 
-    addToggle(worldTab, "👁️ Player ESP", false, function(state)
+    addToggle(worldTab, "Player ESP", false, function(state)
         espEnabled = state
         if not state then
             for _, v in pairs(player.PlayerGui:GetChildren()) do
@@ -437,16 +437,16 @@ local function loadMainHub()
         end
     end)
 
-    addButton(worldTab, "☀️ Full Bright", function()
+    addButton(worldTab, "Full Bright", function()
         Lighting.Brightness = 10
         Lighting.ClockTime = 12
     end, Color3.fromRGB(200, 150, 0))
 
-    addButton(worldTab, "🌙 Reset Light", function()
+    addButton(worldTab, "Reset Light", function()
         Lighting.Brightness = 1
     end, Color3.fromRGB(100, 100, 150))
 
-    addButton(miscTab, "💀 Kill All", function()
+    addButton(miscTab, "Kill All", function()
         for _, v in pairs(Workspace:GetChildren()) do
             if v:FindFirstChild("Humanoid") and v ~= player.Character then
                 v.Humanoid.Health = 0
@@ -454,11 +454,11 @@ local function loadMainHub()
         end
     end, Color3.fromRGB(200, 0, 0))
 
-    addButton(miscTab, "🔄 Rejoin", function()
+    addButton(miscTab, "Rejoin", function()
         game:GetService("TeleportService"):Teleport(game.PlaceId, player)
     end, Color3.fromRGB(200, 50, 50))
 
-    addButton(miscTab, "📋 Game Info", function()
+    addButton(miscTab, "Game Info", function()
         print("Game: " .. game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name)
         print("Players: " .. #Players:GetPlayers())
         print("Place ID: " .. game.PlaceId)
@@ -597,7 +597,7 @@ local function loadMainHub()
         end
     end)
 
-    print("✦ KAIRON HUB LOADED ✦")
+    print("KAIRON HUB LOADED")
     print("Press RightShift to toggle")
 end
 
