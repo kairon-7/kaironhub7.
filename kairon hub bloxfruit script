@@ -1,34 +1,22 @@
--- KAIRON HUB
 local player = game.Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
-local VirtualUser = game:GetService("VirtualUser")
-local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
-local Lighting = game:GetService("Lighting")
-local RunService = game:GetService("RunService")
 
-local godMode = false
-local autoFarm = false
-local autoCollect = false
-local espEnabled = false
-local infStamina = false
-local speedValue = 16
-local menuOpen = true
-local flyEnabled = false
-local noclipEnabled = false
+local CORRECT_KEY = "kairon-top"
+local DISCORD_INVITE = "https://discord.gg/pD44euAEr"
+local MAIN_SCRIPT_URL = "https://raw.githubusercontent.com/kairon-7/kaironhub7./refs/heads/main/kairon%20hub%20bloxfruit%20script"
 
-if player.PlayerGui:FindFirstChild("KaironHub") then
-    player.PlayerGui.KaironHub:Destroy()
+if player.PlayerGui:FindFirstChild("KeySystem") then
+    player.PlayerGui.KeySystem:Destroy()
 end
 
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "KaironHub"
+screenGui.Name = "KeySystem"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = player.PlayerGui
 
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 380, 0, 480)
-mainFrame.Position = UDim2.new(0.5, -190, 0.5, -240)
+mainFrame.Size = UDim2.new(0, 350, 0, 280)
+mainFrame.Position = UDim2.new(0.5, -175, 0.5, -140)
 mainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 35)
 mainFrame.BackgroundTransparency = 0.05
 mainFrame.BorderSizePixel = 0
@@ -51,7 +39,7 @@ headerCorner.Parent = header
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 15, 0, 0)
-title.Text = "✦ KAIRON HUB ✦"
+title.Text = "KAIRON HUB"
 title.TextColor3 = Color3.fromRGB(255, 200, 80)
 title.TextScaled = true
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -62,7 +50,7 @@ title.Parent = header
 local closeBtn = Instance.new("TextButton")
 closeBtn.Size = UDim2.new(0, 30, 0, 30)
 closeBtn.Position = UDim2.new(1, -40, 0, 7.5)
-closeBtn.Text = "✕"
+closeBtn.Text = "X"
 closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 closeBtn.TextSize = 18
 closeBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
@@ -77,487 +65,145 @@ closeBtn.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
 
-local tabFrame = Instance.new("Frame")
-tabFrame.Size = UDim2.new(1, 0, 0, 35)
-tabFrame.Position = UDim2.new(0, 0, 0, 45)
-tabFrame.BackgroundTransparency = 1
-tabFrame.Parent = mainFrame
+local content = Instance.new("Frame")
+content.Size = UDim2.new(1, -20, 1, -60)
+content.Position = UDim2.new(0, 10, 0, 55)
+content.BackgroundTransparency = 1
+content.Parent = mainFrame
 
-local contentFrame = Instance.new("Frame")
-contentFrame.Size = UDim2.new(1, -10, 1, -90)
-contentFrame.Position = UDim2.new(0, 5, 0, 85)
-contentFrame.BackgroundTransparency = 1
-contentFrame.Parent = mainFrame
+local discordBg = Instance.new("Frame")
+discordBg.Size = UDim2.new(1, 0, 0, 35)
+discordBg.Position = UDim2.new(0, 0, 0, 0)
+discordBg.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
+discordBg.BorderSizePixel = 0
+discordBg.Parent = content
 
-local tabs = {}
+local discordCorner = Instance.new("UICorner")
+discordCorner.CornerRadius = UDim.new(0, 8)
+discordCorner.Parent = discordBg
 
-local function createTab(name, icon)
-    local btn = Instance.new("TextButton")
-    local width = 85
-    btn.Size = UDim2.new(0, width, 1, 0)
-    btn.Position = UDim2.new(0, #tabs * (width + 5), 0, 0)
-    btn.Text = icon .. " " .. name
-    btn.TextColor3 = Color3.fromRGB(180, 180, 210)
-    btn.TextSize = 12
-    btn.BackgroundColor3 = Color3.fromRGB(25, 25, 45)
-    btn.BorderSizePixel = 0
-    btn.Font = Enum.Font.GothamSemibold
-    btn.Parent = tabFrame
+local discordLabel = Instance.new("TextButton")
+discordLabel.Size = UDim2.new(1, 0, 1, 0)
+discordLabel.Text = "JOIN OUR DISCORD SERVER"
+discordLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+discordLabel.TextSize = 14
+discordLabel.BackgroundTransparency = 1
+discordLabel.Font = Enum.Font.GothamBold
+discordLabel.Parent = discordBg
+
+discordLabel.MouseButton1Click:Connect(function()
+    game:GetService("GuiService"):OpenBrowserWindow(DISCORD_INVITE)
+    print("Opening Discord invite...")
+end)
+
+local keyLabel = Instance.new("TextLabel")
+keyLabel.Size = UDim2.new(1, 0, 0, 20)
+keyLabel.Position = UDim2.new(0, 0, 0, 45)
+keyLabel.Text = "Enter Your Key:"
+keyLabel.TextColor3 = Color3.fromRGB(220, 220, 240)
+keyLabel.TextSize = 14
+keyLabel.TextXAlignment = Enum.TextXAlignment.Left
+keyLabel.BackgroundTransparency = 1
+keyLabel.Font = Enum.Font.GothamSemibold
+keyLabel.Parent = content
+
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(1, 0, 0, 35)
+keyBox.Position = UDim2.new(0, 0, 0, 68)
+keyBox.PlaceholderText = "Paste your key here..."
+keyBox.Text = ""
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.TextSize = 14
+keyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 55)
+keyBox.BorderSizePixel = 0
+keyBox.Font = Enum.Font.GothamSemibold
+keyBox.Parent = content
+
+local keyCorner = Instance.new("UICorner")
+keyCorner.CornerRadius = UDim.new(0, 6)
+keyCorner.Parent = keyBox
+
+local statusLabel = Instance.new("TextLabel")
+statusLabel.Size = UDim2.new(1, 0, 0, 20)
+statusLabel.Position = UDim2.new(0, 0, 0, 108)
+statusLabel.Text = ""
+statusLabel.TextColor3 = Color3.fromRGB(255, 200, 80)
+statusLabel.TextSize = 13
+statusLabel.BackgroundTransparency = 1
+statusLabel.Font = Enum.Font.GothamSemibold
+statusLabel.Parent = content
+
+local unlockBtn = Instance.new("TextButton")
+unlockBtn.Size = UDim2.new(1, 0, 0, 40)
+unlockBtn.Position = UDim2.new(0, 0, 0, 132)
+unlockBtn.Text = "UNLOCK HUB"
+unlockBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+unlockBtn.TextSize = 16
+unlockBtn.BackgroundColor3 = Color3.fromRGB(100, 60, 180)
+unlockBtn.BorderSizePixel = 0
+unlockBtn.Font = Enum.Font.GothamBold
+unlockBtn.Parent = content
+
+local unlockCorner = Instance.new("UICorner")
+unlockCorner.CornerRadius = UDim.new(0, 8)
+unlockCorner.Parent = unlockBtn
+
+local function unlockHub()
+    statusLabel.Text = "Key Valid! Loading Hub..."
+    statusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
     
-    local btnCorner = Instance.new("UICorner")
-    btnCorner.CornerRadius = UDim.new(0, 6)
-    btnCorner.Parent = btn
-    
-    local content = Instance.new("ScrollingFrame")
-    content.Size = UDim2.new(1, 0, 1, 0)
-    content.BackgroundTransparency = 1
-    content.BorderSizePixel = 0
-    content.Visible = false
-    content.Parent = contentFrame
-    
-    local tabData = {btn = btn, content = content}
-    table.insert(tabs, tabData)
-    
-    btn.MouseButton1Click:Connect(function()
-        for _, t in pairs(tabs) do
-            t.content.Visible = false
-            t.btn.BackgroundColor3 = Color3.fromRGB(25, 25, 45)
-            t.btn.TextColor3 = Color3.fromRGB(180, 180, 210)
-        end
-        content.Visible = true
-        btn.BackgroundColor3 = Color3.fromRGB(100, 60, 180)
-        btn.TextColor3 = Color3.fromRGB(255, 200, 80)
+    local success, err = pcall(function()
+        loadstring(game:HttpGet(MAIN_SCRIPT_URL))()
     end)
     
-    if #tabs == 1 then
-        content.Visible = true
-        btn.BackgroundColor3 = Color3.fromRGB(100, 60, 180)
-        btn.TextColor3 = Color3.fromRGB(255, 200, 80)
+    if success then
+        screenGui:Destroy()
+    else
+        statusLabel.Text = "Failed to load hub! Error: " .. tostring(err)
+        statusLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
     end
-    
-    return content
 end
 
-local function addButton(parent, text, callback, color)
-    local btn = Instance.new("TextButton")
-    local yPos = #parent:GetChildren() * 42 + 5
-    btn.Size = UDim2.new(0, 190, 0, 35)
-    btn.Position = UDim2.new(0.5, -95, 0, yPos)
-    btn.Text = text
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextSize = 14
-    btn.BackgroundColor3 = color or Color3.fromRGB(50, 40, 90)
-    btn.BorderSizePixel = 0
-    btn.Font = Enum.Font.GothamSemibold
-    btn.Parent = parent
+local function wrongKey()
+    statusLabel.Text = "Invalid Key! Get key from Discord"
+    statusLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
     
-    local btnCorner = Instance.new("UICorner")
-    btnCorner.CornerRadius = UDim.new(0, 6)
-    btnCorner.Parent = btn
-    
-    btn.MouseButton1Click:Connect(function()
-        pcall(callback)
-    end)
-    
-    return btn
+    keyBox.Position = UDim2.new(0, -5, 0, 68)
+    game:GetService("TweenService"):Create(keyBox, TweenInfo.new(0.1), {Position = UDim2.new(0, 5, 0, 68)}):Play()
+    game:GetService("TweenService"):Create(keyBox, TweenInfo.new(0.1), {Position = UDim2.new(0, -5, 0, 68)}):Play()
+    game:GetService("TweenService"):Create(keyBox, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 68)}):Play()
 end
 
-local function addToggle(parent, text, default, callback)
-    local bg = Instance.new("Frame")
-    local yPos = #parent:GetChildren() * 42 + 5
-    bg.Size = UDim2.new(0, 190, 0, 35)
-    bg.Position = UDim2.new(0.5, -95, 0, yPos)
-    bg.BackgroundColor3 = Color3.fromRGB(35, 35, 55)
-    bg.BorderSizePixel = 0
-    bg.Parent = parent
+unlockBtn.MouseButton1Click:Connect(function()
+    local inputKey = keyBox.Text:lower():gsub("%s+", "")
     
-    local bgCorner = Instance.new("UICorner")
-    bgCorner.CornerRadius = UDim.new(0, 6)
-    bgCorner.Parent = bg
-    
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(0.55, 0, 1, 0)
-    label.Position = UDim2.new(0, 10, 0, 0)
-    label.Text = text
-    label.TextColor3 = Color3.fromRGB(220, 220, 240)
-    label.TextSize = 13
-    label.TextXAlignment = Enum.TextXAlignment.Left
-    label.BackgroundTransparency = 1
-    label.Font = Enum.Font.GothamSemibold
-    label.Parent = bg
-    
-    local tog = Instance.new("TextButton")
-    tog.Size = UDim2.new(0, 45, 0, 25)
-    tog.Position = UDim2.new(0.7, 0, 0.5, -12.5)
-    tog.Text = default and "ON" or "OFF"
-    tog.TextColor3 = Color3.fromRGB(255, 255, 255)
-    tog.TextSize = 12
-    tog.BackgroundColor3 = default and Color3.fromRGB(0, 180, 0) or Color3.fromRGB(180, 0, 0)
-    tog.BorderSizePixel = 0
-    tog.Font = Enum.Font.GothamBold
-    tog.Parent = bg
-    
-    local togCorner = Instance.new("UICorner")
-    togCorner.CornerRadius = UDim.new(0, 5)
-    togCorner.Parent = tog
-    
-    local state = default
-    tog.MouseButton1Click:Connect(function()
-        state = not state
-        tog.Text = state and "ON" or "OFF"
-        tog.BackgroundColor3 = state and Color3.fromRGB(0, 180, 0) or Color3.fromRGB(180, 0, 0)
-        pcall(callback, state)
-    end)
-    pcall(callback, default)
-end
-
-local playerTab = createTab("Player", "👤")
-local worldTab = createTab("World", "🌍")
-local miscTab = createTab("Misc", "🔧")
-
-addButton(playerTab, "💚 Heal", function()
-    local hum = player.Character and player.Character:FindFirstChild("Humanoid")
-    if hum then hum.Health = hum.MaxHealth end
-end, Color3.fromRGB(0, 150, 0))
-
-addToggle(playerTab, "🛡️ God Mode", false, function(state)
-    godMode = state
-    local hum = player.Character and player.Character:FindFirstChild("Humanoid")
-    if hum then
-        hum.MaxHealth = state and 9e9 or 100
-        hum.Health = state and 9e9 or 100
-    end
-end)
-
-local speed = 16
-local speedBtn = addButton(playerTab, "🚀 Speed: 16", function()
-    speed = speed + 10
-    if speed > 100 then speed = 16 end
-    speedBtn.Text = "🚀 Speed: " .. speed
-    local hum = player.Character and player.Character:FindFirstChild("Humanoid")
-    if hum then hum.WalkSpeed = speed end
-end, Color3.fromRGB(0, 100, 200))
-
-addToggle(playerTab, "🕊️ Fly Mode", false, function(state)
-    flyEnabled = state
-    local char = player.Character
-    if char then
-        local hum = char:FindFirstChild("Humanoid")
-        if hum then
-            hum.PlatformStand = state
-        end
-    end
-end)
-
-addToggle(playerTab, "🚪 Noclip", false, function(state)
-    noclipEnabled = state
-    if state then
-        for _, v in pairs(player.Character:GetChildren()) do
-            if v:IsA("BasePart") then
-                v.CanCollide = false
-            end
-        end
-    end
-end)
-
-addToggle(worldTab, "⚔️ Auto Farm", false, function(state)
-    autoFarm = state
-end)
-
-addToggle(worldTab, "📦 Auto Collect", false, function(state)
-    autoCollect = state
-end)
-
-addToggle(worldTab, "👁️ Player ESP", false, function(state)
-    espEnabled = state
-    if not state then
-        for _, v in pairs(player.PlayerGui:GetChildren()) do
-            if v.Name == "ESP" then v:Destroy() end
-        end
-    end
-end)
-
-addButton(worldTab, "☀️ Full Bright", function()
-    Lighting.Brightness = 10
-    Lighting.ClockTime = 12
-end, Color3.fromRGB(200, 150, 0))
-
-addButton(worldTab, "🌙 Reset Light", function()
-    Lighting.Brightness = 1
-end, Color3.fromRGB(100, 100, 150))
-
-addButton(miscTab, "💀 Kill All", function()
-    for _, v in pairs(Workspace:GetChildren()) do
-        if v:FindFirstChild("Humanoid") and v ~= player.Character then
-            v.Humanoid.Health = 0
-        end
-    end
-end, Color3.fromRGB(200, 0, 0))
-
-addButton(miscTab, "🔄 Rejoin", function()
-    game:GetService("TeleportService"):Teleport(game.PlaceId, player)
-end, Color3.fromRGB(200, 50, 50))
-
-addButton(miscTab, "📋 Game Info", function()
-    print("Game: " .. game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name)
-    print("Players: " .. #Players:GetPlayers())
-    print("Place ID: " .. game.PlaceId)
-end, Color3.fromRGB(50, 150, 200))
-
-coroutine.wrap(function()
-    while true do
-        wait(0.15)
-        if autoFarm and player.Character then
-            pcall(function()
-                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-                if not hrp then return end
-                
-                local nearest = nil
-                local shortest = 500
-                
-                for _, v in pairs(Workspace:GetChildren()) do
-                    if v:FindFirstChild("Humanoid") and v ~= player.Character then
-                        local hum = v.Humanoid
-                        if hum.Health and hum.Health > 0 then
-                            local target = v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") or v:FindFirstChild("Head")
-                            if target then
-                                local dist = (target.Position - hrp.Position).Magnitude
-                                if dist < shortest then
-                                    shortest = dist
-                                    nearest = v
-                                end
-                            end
-                        end
-                    end
-                end
-                
-                if nearest then
-                    local target = nearest:FindFirstChild("HumanoidRootPart") or nearest:FindFirstChild("Torso") or nearest:FindFirstChild("Head")
-                    if target then
-                        hrp.CFrame = target.CFrame * CFrame.new(0, 0, 4)
-                        wait(0.05)
-                        VirtualUser:Button1Down(Vector2.new(0, 0))
-                        wait(0.05)
-                        VirtualUser:Button1Up(Vector2.new(0, 0))
-                    end
-                end
-            end)
-        end
-    end
-end)()
-
-coroutine.wrap(function()
-    while true do
-        wait(0.3)
-        if autoCollect and player.Character then
-            pcall(function()
-                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-                if not hrp then return end
-                
-                for _, v in pairs(Workspace:GetChildren()) do
-                    if v:IsA("Part") or v:IsA("MeshPart") then
-                        local name = v.Name:lower()
-                        if string.find(name, "drop") or string.find(name, "collect") or string.find(name, "item") or string.find(name, "coin") then
-                            if (v.Position - hrp.Position).Magnitude < 20 then
-                                hrp.CFrame = v.CFrame * CFrame.new(0, 1, 0)
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)()
-
-coroutine.wrap(function()
-    while true do
-        wait(1)
-        if espEnabled then
-            for _, plr in pairs(Players:GetPlayers()) do
-                if plr ~= player and plr.Character then
-                    pcall(function()
-                        if not plr.Character:FindFirstChild("ESP") then
-                            local esp = Instance.new("BillboardGui")
-                            esp.Name = "ESP"
-                            esp.Size = UDim2.new(0, 80, 0, 20)
-                            local head = plr.Character:FindFirstChild("Head") or plr.Character:FindFirstChild("HumanoidRootPart")
-                            if head then
-                                esp.Adornee = head
-                                esp.Parent = plr.Character
-                                
-                                local label = Instance.new("TextLabel")
-                                label.Size = UDim2.new(1, 0, 1, 0)
-                                label.Text = plr.Name
-                                label.TextColor3 = Color3.fromRGB(255, 50, 50)
-                                label.TextScaled = true
-                                label.BackgroundTransparency = 1
-                                label.Font = Enum.Font.GothamBold
-                                label.Parent = esp
-                            end
-                        end
-                    end)
-                end
-            end
-        end
-    end
-end)()
-
-RunService.Heartbeat:Connect(function()
-    if flyEnabled and player.Character then
-        local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-        if hrp then
-            hrp.Velocity = Vector3.new(0, 0, 0)
-        end
+    if inputKey == "" then
+        statusLabel.Text = "Please enter a key!"
+        statusLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
+        return
     end
     
-    if noclipEnabled and player.Character then
-        for _, v in pairs(player.Character:GetChildren()) do
-            if v:IsA("BasePart") then
-                v.CanCollide = false
-            end
-        end
+    if inputKey == CORRECT_KEY then
+        unlockHub()
+    else
+        wrongKey()
     end
 end)
 
-player.CharacterAdded:Connect(function(char)
-    wait(0.5)
-    if godMode then
-        local hum = char:FindFirstChild("Humanoid")
-        if hum then
-            hum.MaxHealth = 9e9
-            hum.Health = 9e9
-        end
+keyBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        unlockBtn.MouseButton1Click:Fire()
     end
 end)
+
+keyBox:CaptureFocus()
 
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if not gameProcessed and input.KeyCode == Enum.KeyCode.RightShift then
-        menuOpen = not menuOpen
-        screenGui.Enabled = menuOpen
+        screenGui.Enabled = not screenGui.Enabled
     end
 end)
 
-print("✦ KAIRON HUB LOADED ✦")
+print("KAIRON HUB KEY SYSTEM LOADED")
 print("Press RightShift to toggle")
-
--- Add this to the World Tab section (replace the existing Auto Farm toggle)
-
--- Blox Fruits Specific Toggles
-addToggle(worldTab, "⚔️ Auto Farm (BF)", false, function(state)
-    autoFarm = state
-    if state then
-        print("⚔️ Blox Fruits Auto Farm ON")
-    end
-end)
-
-addToggle(worldTab, "🎣 Auto Fish (BF)", false, function(state)
-    autoFish = state
-    if state then
-        print("🎣 Auto Fish ON - Equip rod!")
-    end
-end)
-
-addToggle(worldTab, "👑 Auto V4 (BF)", false, function(state)
-    autoV4 = state
-    if state then
-        print("👑 Auto V4 ON - Go to Mirage!")
-    end
-end)
-
-addToggle(worldTab, "🗡️ Auto Raid (BF)", false, function(state)
-    autoRaid = state
-    if state then
-        print("🗡️ Auto Raid ON")
-    end
-end)
-
--- Add Blox Fruits teleports
-addButton(worldTab, "🌀 Teleport to Mirage", function()
-    for _, v in pairs(Workspace:GetChildren()) do
-        if string.find(v.Name:lower(), "mirage") then
-            local part = v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Head") or v:FindFirstChildWhichIsA("Part")
-            if part and player.Character then
-                player.Character.HumanoidRootPart.CFrame = part.CFrame * CFrame.new(0, 5, 0)
-                print("🌀 Teleported to Mirage!")
-                break
-            end
-        end
-    end
-end, Color3.fromRGB(200, 0, 200))
-
-coroutine.wrap(function()
-    while true do
-        wait(0.15)
-        if autoFarm and player.Character then
-            pcall(function()
-                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-                if not hrp then return end
-                
-                local nearest = nil
-                local shortest = 500
-                
-                -- Blox Fruits specific enemy detection
-                for _, v in pairs(Workspace:GetChildren()) do
-                    -- Check for Blox Fruits NPCs
-                    if v:FindFirstChild("Humanoid") and v ~= player.Character then
-                        local hum = v.Humanoid
-                        if hum.Health and hum.Health > 0 then
-                            local target = v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") or v:FindFirstChild("Head")
-                            if target then
-                                local dist = (target.Position - hrp.Position).Magnitude
-                                if dist < shortest then
-                                    shortest = dist
-                                    nearest = v
-                                end
-                            end
-                        end
-                    end
-                    -- Also check for NPCs without Humanoid (some BF enemies)
-                    if not nearest and v:IsA("Model") and v:FindFirstChild("Head") and not v:FindFirstChild("Humanoid") then
-                        if v.Name ~= player.Name then
-                            local target = v:FindFirstChild("Head") or v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso")
-                            if target then
-                                local dist = (target.Position - hrp.Position).Magnitude
-                                if dist < shortest then
-                                    shortest = dist
-                                    nearest = v
-                                end
-                            end
-                        end
-                    end
-                end
-                
-                if nearest then
-                    local target = nearest:FindFirstChild("HumanoidRootPart") or nearest:FindFirstChild("Torso") or nearest:FindFirstChild("Head")
-                    if target then
-                        hrp.CFrame = target.CFrame * CFrame.new(0, 0, 4)
-                        wait(0.05)
-                        VirtualUser:Button1Down(Vector2.new(0, 0))
-                        wait(0.05)
-                        VirtualUser:Button1Up(Vector2.new(0, 0))
-                    end
-                end
-            end)
-        end
-    end
-end)()
-
-coroutine.wrap(function()
-    while true do
-        wait(1)
-        if autoV4 then
-            pcall(function()
-                for _, v in pairs(Workspace:GetChildren()) do
-                    if v:FindFirstChild("ClickDetector") then
-                        local name = v.Name:lower()
-                        if string.find(name, "trial") or string.find(name, "gear") or string.find(name, "mirage") then
-                            fireclickdetector(v.ClickDetector)
-                            wait(0.5)
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)()
-
+print("Click Discord button to join")
